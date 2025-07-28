@@ -1,0 +1,83 @@
+{
+  "name": "zouzhe-fish",
+  "displayName": "zouzhe-fish",
+  "description": "vscode批折子",
+  "version": "0.0.3",
+  "publisher": "ChantOfWind",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "icon": "long.jpg",
+  "engines": {
+    "vscode": "^1.101.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "zouzhe-fish.startReading",
+        "title": "Start Reading Novel",
+        "category": "Novel Reader"
+      },
+      {
+        "command": "zouzhe-fish.stopReading",
+        "title": "Stop Reading Novel",
+        "category": "Novel Reader"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "zouzhe-fish.nextChapter",
+        "key": "ctrl+alt+pagedown",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "zouzhe-fish.prevChapter",
+        "key": "ctrl+alt+pageup",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "zouzhe-fish.nextContent",
+        "key": "ctrl+alt+end",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "zouzhe-fish.prevContent",
+        "key": "ctrl+alt+home",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.101.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@types/axios": "^0.9.36",
+    "axios": "^1.10.0",
+    "cheerio": "^1.1.0",
+    "iconv-lite": "^0.6.3",
+    "jschardet": "^3.1.4"
+  }
+}
