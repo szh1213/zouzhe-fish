@@ -160,7 +160,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // 注册命令
     const nextContentCommand = vscode.commands.registerCommand('zouzhe-fish.nextContent', () => {
-        currentPosition = Math.min(currentPosition + wordsPerSegment, fullText.length);
+        currentPosition = Math.min(currentPosition, fullText.length);
         updateStatusBar();
     });
     const prevContentCommand = vscode.commands.registerCommand('zouzhe-fish.prevContent', () => {
@@ -170,7 +170,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     const startReadingCommand = vscode.commands.registerCommand('zouzhe-fish.startReading', async () => {
         const url = await vscode.window.showInputBox({
-            placeHolder: '输入小说章节URL',
+            placeHolder: '输入章节URL',
             value: currentUrl
         });
         
