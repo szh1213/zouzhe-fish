@@ -1,8 +1,8 @@
 {
   "name": "zouzhe-fish",
   "displayName": "zouzhe-fish",
-  "description": "vscode批折子",
-  "version": "0.0.3",
+  "description": "在vscode上批折子",
+  "version": "0.0.4",
   "publisher": "ChantOfWind",
   "license": "MIT",
   "repository": {

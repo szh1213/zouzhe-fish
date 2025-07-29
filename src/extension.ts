@@ -108,7 +108,7 @@ export function activate(context: vscode.ExtensionContext) {
             // 清理内容中的多余的换行
             content = content.replace(/\s+/g, ' ').trim();
             // 将标题插入正文开头和结尾
-            return `【${chapterTitle}】${content}【${chapterTitle}】`;
+            return `this is the beginning of the chapter 【${chapterTitle}】${content}【${chapterTitle}】this is the end of the chapter`;
         } catch (error) {
             vscode.window.showErrorMessage('get novel content fail: ' + (error as Error).message);
             return '';
@@ -127,7 +127,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// 从章节标题中提取章节号
 		chapterNumber = fullText.substring(0,50).match(/第(\d+)(章|节)/)?.[1] || '未知章节';
 		//chapterNumber = fullText.substring(0,50).match(/\d{m,n}/)?.[1] || '未知章节';
-        novelStatusBarItem.text = `[${chapterNumber}]${segment} [${currentPosition/wordsPerSegment}/${Math.round(fullText.length/wordsPerSegment)}]`;
+        novelStatusBarItem.text = `[${chapterNumber}]${segment} [${Math.floor(currentPosition/wordsPerSegment)}/${Math.floor(fullText.length/wordsPerSegment)+1}]`;
         novelStatusBarItem.show();
         
         saveReadingState(); // 自动保存阅读位置
@@ -160,18 +160,11 @@ export function activate(context: vscode.ExtensionContext) {
 
     // 注册命令
     const nextContentCommand = vscode.commands.registerCommand('zouzhe-fish.nextContent', () => {
-        if (currentPosition >= fullText.length) {
-            vscode.window.showInformationMessage('this is the end of the chapter');
-            return;
-        }
+        currentPosition = Math.min(currentPosition + wordsPerSegment, fullText.length);
         updateStatusBar();
     });
     const prevContentCommand = vscode.commands.registerCommand('zouzhe-fish.prevContent', () => {
-        if (currentPosition <= 0) {
-            vscode.window.showInformationMessage('this is the beginning of the chapter');
-            return;
-        }
-        currentPosition = Math.max(currentPosition - wordsPerSegment, 0);
+        currentPosition = Math.max(currentPosition - wordsPerSegment, wordsPerSegment);
         updateStatusBar(-1);
     });
 
