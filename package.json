@@ -2,7 +2,7 @@
   "name": "zouzhe-fish",
   "displayName": "zouzhe-fish",
   "description": "在vscode上批折子",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "publisher": "ChantOfWind",
   "license": "MIT",
   "repository": {
@@ -21,36 +21,46 @@
   "contributes": {
     "commands": [
       {
+        "command": "zouzhe-fish.openBookshelf",
+        "title": "Open Bookshelf",
+        "category": "zouzhe-fish"
+      },
+      {
+        "command": "zouzhe-fish.deleteBook",
+        "title": "Delete Book",
+        "category": "zouzhe-fish"
+      },
+      {
         "command": "zouzhe-fish.startReading",
-        "title": "Start Reading Novel",
-        "category": "Novel Reader"
+        "title": "Start Reading zouzhe",
+        "category": "zouzhe-fish"
       },
       {
         "command": "zouzhe-fish.stopReading",
-        "title": "Stop Reading Novel",
-        "category": "Novel Reader"
+        "title": "Stop Reading zouzhe",
+        "category": "zouzhe-fish"
       }
     ],
     "keybindings": [
       {
         "command": "zouzhe-fish.nextChapter",
         "key": "ctrl+alt+pagedown",
-        "when": "editorTextFocus"
+        "when": "!editorTextFocus"
       },
       {
         "command": "zouzhe-fish.prevChapter",
         "key": "ctrl+alt+pageup",
-        "when": "editorTextFocus"
+        "when": "!editorTextFocus"
       },
       {
         "command": "zouzhe-fish.nextContent",
         "key": "ctrl+alt+end",
-        "when": "editorTextFocus"
+        "when": "!editorTextFocus"
       },
       {
         "command": "zouzhe-fish.prevContent",
         "key": "ctrl+alt+home",
-        "when": "editorTextFocus"
+        "when": "!editorTextFocus"
       }
     ]
   },
