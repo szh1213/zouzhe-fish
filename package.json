@@ -1,93 +1,145 @@
 {
-  "name": "zouzhe-fish",
-  "displayName": "zouzhe-fish",
-  "description": "在vscode上批折子",
-  "version": "0.0.6",
-  "publisher": "ChantOfWind",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/szh1213/zouzhe-fish.git"
-  },
-  "icon": "long.jpg",
-  "engines": {
-    "vscode": "^1.101.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
-  "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "zouzhe-fish.openBookshelf",
-        "title": "Open Bookshelf",
-        "category": "zouzhe-fish"
-      },
-      {
-        "command": "zouzhe-fish.deleteBook",
-        "title": "Delete Book",
-        "category": "zouzhe-fish"
-      },
-      {
-        "command": "zouzhe-fish.startReading",
-        "title": "Start Reading zouzhe",
-        "category": "zouzhe-fish"
-      },
-      {
-        "command": "zouzhe-fish.stopReading",
-        "title": "Stop Reading zouzhe",
-        "category": "zouzhe-fish"
-      }
+    "name": "zouzhe-fish",
+    "displayName": "zouzhe-fish",
+    "description": "在vscode上批折子(zouzhe)阅读，支持书架管理",
+    "version": "0.0.7",
+    "publisher": "ChantOfWind",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/szh1213/zouzhe-fish.git"
+    },
+    "icon": "long.jpg",
+    "engines": {
+        "vscode": "^1.101.0"
+    },
+    "categories": [
+        "Other"
     ],
-    "keybindings": [
-      {
-        "command": "zouzhe-fish.nextChapter",
-        "key": "ctrl+alt+pagedown",
-        "when": "!editorTextFocus"
-      },
-      {
-        "command": "zouzhe-fish.prevChapter",
-        "key": "ctrl+alt+pageup",
-        "when": "!editorTextFocus"
-      },
-      {
-        "command": "zouzhe-fish.nextContent",
-        "key": "ctrl+alt+end",
-        "when": "!editorTextFocus"
-      },
-      {
-        "command": "zouzhe-fish.prevContent",
-        "key": "ctrl+alt+home",
-        "when": "!editorTextFocus"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src",
-    "test": "vscode-test"
-  },
-  "devDependencies": {
-    "@types/mocha": "^10.0.10",
-    "@types/node": "20.x",
-    "@types/vscode": "^1.101.0",
-    "@typescript-eslint/eslint-plugin": "^8.31.1",
-    "@typescript-eslint/parser": "^8.31.1",
-    "@vscode/test-cli": "^0.0.11",
-    "@vscode/test-electron": "^2.5.2",
-    "eslint": "^9.25.1",
-    "typescript": "^5.8.3"
-  },
-  "dependencies": {
-    "@types/axios": "^0.9.36",
-    "axios": "^1.10.0",
-    "cheerio": "^1.1.0",
-    "iconv-lite": "^0.6.3",
-    "jschardet": "^3.1.4"
-  }
+    "activationEvents": [
+
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "zouzhe-fish.openBookshelf",
+                "title": "Open Bookshelf",
+                "category": "zouzhe-fish"
+            },
+            {
+                "command": "zouzhe-fish.deleteBook",
+                "title": "Delete Book",
+                "category": "zouzhe-fish"
+            },
+            {
+                "command": "zouzhe-fish.startReading",
+                "title": "Start Reading zouzhe",
+                "category": "zouzhe-fish"
+            },
+            {
+                "command": "zouzhe-fish.stopReading",
+                "title": "Stop Reading zouzhe",
+                "category": "zouzhe-fish"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "zouzhe-fish.nextChapter",
+                "key": "ctrl+alt+pagedown",
+                "when": "!editorTextFocus"
+            },
+            {
+                "command": "zouzhe-fish.prevChapter",
+                "key": "ctrl+alt+pageup",
+                "when": "!editorTextFocus"
+            },
+            {
+                "command": "zouzhe-fish.nextContent",
+                "key": "ctrl+alt+end",
+                "when": "!editorTextFocus"
+            },
+            {
+                "command": "zouzhe-fish.prevContent",
+                "key": "ctrl+alt+home",
+                "when": "!editorTextFocus"
+            }
+        ],
+        "configuration": {
+            "title": "zouzhe-fish",
+            "properties": {
+                "zouzhe-fish.workTimeProcessor": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "是否启用工作时间进度条"
+                },
+                "workProgress.startHour": {
+                    "type": "number",
+                    "default": 9,
+                    "description": "上班开始小时 (0-23)"
+                },
+                "workProgress.startMinute": {
+                    "type": "number",
+                    "default": 0,
+                    "description": "上班开始分钟 (0-59)"
+                },
+                "workProgress.endHour": {
+                    "type": "number",
+                    "default": 18,
+                    "description": "下班结束小时 (0-23)"
+                },
+                "workProgress.endMinute": {
+                    "type": "number",
+                    "default": 0,
+                    "description": "下班结束分钟 (0-59)"
+                },
+                "workProgress.lunchStartHour": {
+                    "type": "number",
+                    "default": 12,
+                    "description": "午休开始小时 (0-23)"
+                },
+                "workProgress.lunchStartMinute": {
+                    "type": "number",
+                    "default": 0,
+                    "description": "午休开始分钟 (0-59)"
+                },
+                "workProgress.lunchEndHour": {
+                    "type": "number",
+                    "default": 13,
+                    "description": "午休结束小时 (0-23)"
+                },
+                "workProgress.lunchEndMinute": {
+                    "type": "number",
+                    "default": 0,
+                    "description": "午休结束分钟 (0-59)"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src",
+        "test": "vscode-test"
+    },
+    "devDependencies": {
+        "@types/mocha": "^10.0.10",
+        "@types/node": "20.x",
+        "@types/vscode": "^1.101.0",
+        "@typescript-eslint/eslint-plugin": "^8.31.1",
+        "@typescript-eslint/parser": "^8.31.1",
+        "@vscode/test-cli": "^0.0.11",
+        "@vscode/test-electron": "^2.5.2",
+        "eslint": "^9.25.1",
+        "typescript": "^5.8.3"
+    },
+    "dependencies": {
+        "@types/axios": "^0.9.36",
+        "axios": "^1.10.0",
+        "cheerio": "^1.1.0",
+        "iconv-lite": "^0.6.3",
+        "jschardet": "^3.1.4"
+    }
 }

@@ -1,7 +1,9 @@
 # 在vs code的状态栏里批折子
 
 ### 目前明确支持的大臣（潜在支持的不一一列举）
-
+- https://www.ddyveshu.cc/
+- https://wodushu.com
+- https://www.5scw.com
 - https://www.xblqugex.cc
 - http://www.2wxss.com
 - https://www.wodeshucheng.net
