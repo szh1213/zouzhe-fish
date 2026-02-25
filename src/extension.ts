@@ -140,8 +140,8 @@ export function activate(context: vscode.ExtensionContext) {
             const html = iconv.decode(responseData, encoding);
             const $ = cheerio.load(html);
             
-            chapterTitle = $('body').find('h1').last().text() || '未知章节';
-            chapterNumber = chapterTitle.match(/第([零一二三四五六七八九十百千万亿\d]+)(?:章|节)/)?.[1] || '未知章节号';
+            chapterTitle = $('body').find('h1').last().text().replace(/\s+/g, ' ').trim() || '未知章节';
+            chapterNumber = chapterTitle.match(/第([零一二三四五六七八九十百千万\d]+)(?:章|节)/)?.[1] || '未知章节号';
             // 获取所有div，找到包含<p>标签最多的最内层标签作为章节内容
             let maxPCount = 0;
             let content = '';
