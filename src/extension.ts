@@ -142,22 +142,40 @@ export function activate(context: vscode.ExtensionContext) {
             
             chapterTitle = $('body').find('h1').last().text() || '未知章节';
             chapterNumber = chapterTitle.match(/第([零一二三四五六七八九十百千万亿\d]+)(?:章|节)/)?.[1] || '未知章节号';
-            // 获取所有div，找到文本最长的div作为章节内容
-            let maxLen = 0;
+            // 获取所有div，找到包含<p>标签最多的最内层标签作为章节内容
+            let maxPCount = 0;
             let content = '';
-            // 只查找没有子div的div（叶子div）,且div包含叶子p
-            $('div').each((_, el) => {
-                // 如果div的最后一个元素是a
-                if ($(el).find('div').length === 0) {
-                    if($(el).find('p').length > 0 || $(el).find('br').length > 0){
-                        const text = $(el).text().trim();
-                        if (text.length > maxLen) {
-                            maxLen = text.length;
-                            content = text;
-                        }
+            // 查找最内层的标签（没有其他同级标签包含更多内容的标签）
+            $('div, section, article, main').each((_, el) => {
+                // 检查是否为最内层标签（没有子元素包含div, section, article, main等容器标签）
+                if ($(el).children('div, section, article, main').length === 0) {
+                    const pTags = $(el).find('p');
+                    if (pTags.length > maxPCount) {
+                        maxPCount = pTags.length;
+                        // 提取所有p标签的文本内容
+                        content = '';
+                        pTags.each((i, pEl) => {
+                            content += $(pEl).text().trim() + ' ';
+                        });
                     }
                 }
             });
+            
+            // 如果没有找到p标签，回退到原来的策略
+            if (maxPCount === 0) {
+                let maxLen = 0;
+                $('div, section, article, main').each((_, el) => {
+                    if ($(el).children('div, section, article, main').length === 0) {
+                        if ($(el).find('p').length > 0 || $(el).find('br').length > 0) {
+                            const text = $(el).text().trim();
+                            if (text.length > maxLen) {
+                                maxLen = text.length;
+                                content = text;
+                            }
+                        }
+                    }
+                });
+            }
 
             // 查找上一章、下一章、下一页链接、目录链接
             prevUrl = '';
@@ -196,10 +214,12 @@ export function activate(context: vscode.ExtensionContext) {
             if (bookUrl){
                 // 查找所有a元素，匹配书籍名称, 如果href是bookurl，text则是书籍名称
                 $('a').each((_, el) => {
-                    if( $(el).attr('href') === bookuri ){
+                    if( $(el).attr('href') === bookuri || $(el).attr('href') === bookUrl ){
                         bookname = $(el).text().trim();
                         nextChapterBtnBarItem.tooltip = `《${bookname}》${chapterTitle}`;
-                        return false; // 找到后退出循环
+                        if (! bookname.includes("目录")){
+                            return false; // 找到后退出循环
+                        }
                     }
                 });
             }
@@ -422,8 +442,12 @@ export function activate(context: vscode.ExtensionContext) {
         const lunchEndSeconds = config.lunchEndHour * 3600 + config.lunchEndMinute * 60;
         
         // 判断是否在工作时间
-        if (currentSeconds < startSeconds) return 0; // 还没上班
-        if (currentSeconds >= endSeconds) return 1; // 已经下班
+        if (currentSeconds < startSeconds) {
+            return 0; // 还没上班
+        }
+        if (currentSeconds >= endSeconds){
+            return 1; // 已经下班
+        }
         
         // 计算总工作时间和已工作时间
         const totalWorkSeconds = (endSeconds - startSeconds) - (lunchEndSeconds - lunchStartSeconds);
@@ -440,8 +464,12 @@ export function activate(context: vscode.ExtensionContext) {
 
     // 格式化剩余时间
     const formatTimeRemaining = (progress: number): string => {
-        if (progress <= 0) return '还未开始';
-        if (progress >= 1) return '已完成';
+        if (progress <= 0) {
+            return '还未开始';
+        }
+        if (progress >= 1) {
+            return '已完成';
+        }
         
         const now = new Date();
         const config = getConfig();
@@ -496,7 +524,7 @@ export function activate(context: vscode.ExtensionContext) {
     // 注册清理函数
     context.subscriptions.push({
         dispose: () => {
-            clearInterval(idleTimer)
+            clearInterval(idleTimer);
             clearInterval(updateInterval);
             configListener.dispose();
         }

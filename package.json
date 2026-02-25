@@ -2,7 +2,7 @@
     "name": "zouzhe-fish",
     "displayName": "zouzhe-fish",
     "description": "在vscode上批折子(zouzhe)阅读，支持书架管理",
-    "version": "0.0.7",
+    "version": "0.0.9",
     "publisher": "ChantOfWind",
     "license": "MIT",
     "repository": {
