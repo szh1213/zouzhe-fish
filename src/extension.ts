@@ -142,36 +142,40 @@ export function activate(context: vscode.ExtensionContext) {
             
             chapterTitle = $('body').find('h1').last().text().replace(/\s+/g, ' ').trim() || '未知章节';
             chapterNumber = chapterTitle.match(/第([零一二三四五六七八九十百千万\d]+)(?:章|节)/)?.[1] || '未知章节号';
-            // 获取所有div，找到包含<p>标签最多的最内层标签作为章节内容
+            // 获取所有div，找到直接包含<p>标签最多的标签作为章节内容
             let maxPCount = 0;
             let content = '';
-            // 查找最内层的标签（没有其他同级标签包含更多内容的标签）
+            // 查找直接包含p标签的标签（不包括嵌套子元素中的p标签）
             $('div, section, article, main').each((_, el) => {
-                // 检查是否为最内层标签（没有子元素包含div, section, article, main等容器标签）
-                if ($(el).children('div, section, article, main').length === 0) {
-                    const pTags = $(el).find('p');
-                    if (pTags.length > maxPCount) {
-                        maxPCount = pTags.length;
-                        // 提取所有p标签的文本内容
+                // 只统计直接子元素中的p标签（使用>选择器）
+                const directPTags = $(el).children('p');
+                if (directPTags.length > 0) {
+                    if (directPTags.length > maxPCount) {
+                        maxPCount = directPTags.length;
+                        // 提取直接子p标签的文本内容
                         content = '';
-                        pTags.each((i, pEl) => {
+                        directPTags.each((i, pEl) => {
                             content += $(pEl).text().trim() + ' ';
                         });
                     }
                 }
             });
-            
-            // 如果没有找到p标签，回退到原来的策略
+
+            // 如果没有找到直接包含p标签的元素，回退到原来的策略
             if (maxPCount === 0) {
                 let maxLen = 0;
+                // 查找最内层的标签（没有其他同级标签包含更多内容的标签）
                 $('div, section, article, main').each((_, el) => {
+                    // 检查是否为最内层标签（没有子元素包含div, section, article, main等容器标签）
                     if ($(el).children('div, section, article, main').length === 0) {
-                        if ($(el).find('p').length > 0 || $(el).find('br').length > 0) {
-                            const text = $(el).text().trim();
-                            if (text.length > maxLen) {
-                                maxLen = text.length;
-                                content = text;
-                            }
+                        const pTags = $(el).find('p');
+                        if (pTags.length > maxPCount) {
+                            maxPCount = pTags.length;
+                            // 提取所有p标签的文本内容
+                            content = '';
+                            pTags.each((i, pEl) => {
+                                content += $(pEl).text().trim() + ' ';
+                            });
                         }
                     }
                 });
