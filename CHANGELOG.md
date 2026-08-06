@@ -1,3 +1,7 @@
+### 0.1.1
+ - 增加了一些兼容性
+ - 增加读取洋柿子离线txt小说功能。搭配 https://github.com/zhongbai2333/Tomato-Novel-Downloader 食用洋柿子
+
 ### 0.0.10
 - 新增解析https://lw.131453.xyz格式
 - 去除标题中可能包含的转行
