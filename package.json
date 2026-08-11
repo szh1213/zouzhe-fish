@@ -2,7 +2,7 @@
     "name": "zouzhe-fish",
     "displayName": "zouzhe-fish",
     "description": "在vscode上批折子(zouzhe)阅读，支持书架管理",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "publisher": "ChantOfWind",
     "license": "MIT",
     "repository": {
@@ -16,9 +16,7 @@
     "categories": [
         "Other"
     ],
-    "activationEvents": [
-
-    ],
+    "activationEvents": [],
     "main": "./out/extension.js",
     "contributes": {
         "commands": [
@@ -41,6 +39,11 @@
                 "command": "zouzhe-fish.stopReading",
                 "title": "Stop Reading zouzhe",
                 "category": "zouzhe-fish"
+            },
+            {
+                "command": "zouzhe-fish.addChapterToChat",
+                "title": "Add Current Chapter to Chat",
+                "category": "zouzhe-fish"
             }
         ],
         "keybindings": [
@@ -62,6 +65,11 @@
             {
                 "command": "zouzhe-fish.prevContent",
                 "key": "ctrl+alt+home",
+                "when": "!editorTextFocus"
+            },
+            {
+                "command": "zouzhe-fish.addChapterToChat",
+                "key": "ctrl+alt+i",
                 "when": "!editorTextFocus"
             }
         ],

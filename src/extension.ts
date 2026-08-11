@@ -5,6 +5,7 @@ import * as iconv from 'iconv-lite';
 import * as jschardet from 'jschardet';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as os from 'os';
 
 
 // 细腻的进度条字符集 (Unicode块字符)
@@ -790,6 +791,23 @@ export function activate(context: vscode.ExtensionContext) {
     const nextChapterCommand = vscode.commands.registerCommand('zouzhe-fish.nextChapter', loadNextChapter);
     const prevChapterCommand = vscode.commands.registerCommand('zouzhe-fish.prevChapter', loadPrevChapter);
 
+    // 将当前章节以文件引用方式添加到会话
+    const addChapterToChatCommand = vscode.commands.registerCommand('zouzhe-fish.addChapterToChat', async () => {
+        if (!fullText) {
+            vscode.window.showWarningMessage('当前没有正在阅读的内容');
+            return;
+        }
+        // 写入工作区根目录（无工作区则用临时目录）
+        const workspaceFolder = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+        const dir = workspaceFolder || os.tmpdir();
+        const filePath = path.join(dir, '.zouzhe-chapter.txt');
+        fs.writeFileSync(filePath, fullText, 'utf-8');
+
+        // VS Code 标准方式：将文件附加到 Chat 上下文，不预填提问
+        await vscode.commands.executeCommand('workbench.action.chat.attachFile', vscode.Uri.file(filePath));
+        vscode.window.setStatusBarMessage(`$(comment-discussion) ${chapterTitle} 已添加到会话`, 3000);
+    });
+
     context.subscriptions.push(
         nextContentCommand,
         prevContentCommand,
@@ -798,7 +816,8 @@ export function activate(context: vscode.ExtensionContext) {
         prevChapterCommand,
         stopReadingCommand,
         openBookshelfCommand,
-        deleteBookCommand
+        deleteBookCommand,
+        addChapterToChatCommand
     );
     // 自动尝试恢复阅读
     restoreReading();
